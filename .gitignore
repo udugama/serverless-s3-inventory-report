@@ -1,0 +1,30 @@
+/.serverless
+npm-debug.log
+
+# Webpack reports
+stats.html
+
+# Runtime data
+pids
+*.pid
+*.seed
+/dist
+/build
+
+# Dependency directory
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
+node_modules
+
+#SERVERLESS
+admin.env
+.env
+
+#Ignore _meta folder
+_meta
+
+#IDE related
+.idea/
+
+#OS STUFF
+.DS_Store
+.tmp
