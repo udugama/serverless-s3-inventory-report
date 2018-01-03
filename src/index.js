@@ -1,17 +1,17 @@
 'use strict';
 import { SubscriberFactory } from './subscriptions/SubscriberFactory';
 
-class ServerlessPlugin {
+class CloudwatchLogsSubscribe {
   constructor(serverless, options) {
     this.serverless = serverless;
     this.options = options;
 
     this.commands = {
-      welcome: {
+      subscribe: {
         usage: 'Helps you start your first Serverless plugin',
         lifecycleEvents: [
-          'hello',
-          'world',
+          'init',
+          'deploy',
         ],
         options: {
           region: {
@@ -40,35 +40,32 @@ class ServerlessPlugin {
     };
 
     this.hooks = {
-      'before:welcome:hello': this.beforeWelcome.bind(this),
-      'welcome:hello': this.welcomeUser.bind(this),
-      'welcome:world': this.displayHelloMessage.bind(this),
-      'after:welcome:world': this.afterHelloWorld.bind(this),
+      'before:subscribe:init': this.beforePlugginInit.bind(this),
+      'subscribe:init': this.displaySubscriptionVariables.bind(this),
+      'subscribe:deploy': this.addSubscriptions.bind(this),
+      'after:subscribe:deploy': this.afterSubscribe.bind(this),
     };
   }
 
-  beforeWelcome() {
+  beforePlugginInit() {
     this.serverless.cli.log('initialising the subscription process!');
   }
-
-  welcomeUser() {
-    const subscriber = new SubscriberFactory({
-      region: this.options.region, 
-      streamName: this.options.stream, 
-      logGroupNamePrefix: this.options.logGroup,
-    });
-    this.serverless.cli.log(subscriber.subscribe());
+  displaySubscriptionVariables() {
+      this.serverless.cli.log(`Region set to ${this.options.region}`);
+      this.serverless.cli.log(`Kinesis Stream Name set to ${this.options.stream}`);
+      this.serverless.cli.log(`Log Group Name Prefix set to ${this.options.logGroup}`);
   }
-
-  displayHelloMessage() {
-    this.serverless.cli.log(`Region set to ${this.options.region}`);
-    this.serverless.cli.log(`Kinesis Stream Name set to ${this.options.stream}`);
-    this.serverless.cli.log(`Log Group Name Prefix set to ${this.options.logGroup}`);
+  addSubscriptions() {
+      const subscriber = new SubscriberFactory({
+          region: this.options.region,
+          streamName: this.options.stream,
+          logGroupNamePrefix: this.options.logGroup,
+      });
+      this.serverless.cli.log(subscriber.subscribe());
   }
-
-  afterHelloWorld() {
-    this.serverless.cli.log('Please come again!');
+  afterSubscribe() {
+      this.serverless.cli.log('Cloudwatch Log Group Subscriptions setup Successful.');
   }
 }
 
-module.exports = ServerlessPlugin;
+module.exports = CloudwatchLogsSubscribe;

@@ -84,70 +84,9 @@ export class SubscriberFactory {
 
     await SubscriberResource.initialise();
 
-    // try {
-    //   await this.describeKinesisStream({
-    //     StreamName: this.streamName,
-    //   });
-    //   console.log(`Kenisis Stream ${this.streamName} exists in the environment.`);
-    // } catch (e) {
-    //   console.log(`Kenisis Stream ${this.streamName} does not exists.`);
-    //   console.log(`Creating kinesis stream ${this.streamName} ...`);
-
-    //   await this.kinesis.createStream({
-    //     ShardCount: 1,
-    //     StreamName: this.streamName,
-    //   }).promise()
-    //     .catch((err) => {
-    //       throw new InternalError(err);
-    //     });
-
-    //   /**
-    //    * check wether stream status `ACTIVE`
-    //    */
-    //   await waitForStack({
-    //     waitFor: async () => {
-    //       const {
-    //         StreamDescription: {
-    //           StreamStatus,
-    //         },
-    //       } = await this.describeKinesisStream({
-    //         StreamName: this.streamName,
-    //       });
-    //       /**
-    //        * if the stream not active it will throw `service not avalable` `503` error
-    //        */
-    //       if (StreamStatus !== 'ACTIVE') {
-    //         throw new TemandoError({
-    //           status: '503',
-    //           title: 'Stream service not avalable, initialising.',
-    //           detail: 'Stream service not avalable, initialising.',
-    //         });
-    //       }
-
-    //       return true;
-    //     },
-    //     delayTime: 1000,
-    //     timeout: 40000,
-    //   },
-    //   );
-
-    //   console.log(`Successfully created kinesis stream ${this.streamName}\n`);
-    // }
-
-    console.log(`Requesting kinesis stream ARN ...`);
-
-    // const {
-    //   StreamDescription: {
-    //     StreamARN,
-    //   },
-    // } = await this.describeKinesisStream({ StreamName: this.streamName });
-    // console.log(`Kinesis stream ARN : ${StreamARN}\n`);
+    console.log(`Requesting Subscriber ARN ...`);
 
     const StreamARN = await SubscriberResource.getServiceArn();
-
-    console.log('----------------');
-    console.log(StreamARN);
-    console.log('----------------');
 
     /**
      * get Cloud watch log groups
@@ -314,48 +253,6 @@ export class SubscriberFactory {
     console.log('Compleate adding subscriptions to log groups.');
   }
 
-  // /**
-  //  * Describe kinesis streem
-  //  *
-  //  * @param params
-  //  */
-  // private async describeKinesisStream(params: object): Promise<any> {
-
-  //   return this.kinesis.describeStream(params)
-  //     .promise()
-  //     .catch((err) => {
-  //       throw new NotFoundError(err);
-  //     });
-  // }
-
-  // /**
-  //  * poll aws api till the resource is ready.
-  //  *
-  //  * @param delayTime
-  //  * @param timeout
-  //  * @param waitFor
-  //  */
-  // private async waitForStack({ waitFor, delayTime = 1000, timeout = 10000 }: {
-  //   waitFor: any,
-  //   delayTime: number,
-  //   timeout: number;
-  // }) {
-  //   const startTime = Date.now();
-  //   while ((startTime + timeout) > Date.now()) {
-  //     try {
-  //       await waitFor();
-  //       return;
-  //     } catch (err) {
-  //       await delay(delayTime);
-  //     }
-  //   }
-  //   throw new TemandoError({
-  //     status: '408',
-  //     title: `AWS resource timeout of ${timeout} milliseconds exceeded.`,
-  //     detail: `AWS resource timeout of ${timeout} milliseconds exceeded.`,
-  //   });
-  // }
-
   /**
    * Loop though and return all the Cloudwatch log streams
    *
@@ -378,7 +275,10 @@ export class SubscriberFactory {
   }
 
   /**
-   * resourse
+   * Initialise and Get the Subscription Resource
+   *
+   * @param {string} type type of the subscriber service
+   * @return {*} subscriberResource Kinesis Stream | Kinesis Firehourse | Lambda
    */
   private getSubscriber(type: string): any {
     let subscriberResource: any;
@@ -391,7 +291,7 @@ export class SubscriberFactory {
         break;
 
       /**
-       * @todo Add more services support to the pluggin
+       * @todo Add implimentation of the subscriber services to support to the pluggin
        */
 
       // case 'kinesis-firehose'
