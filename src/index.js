@@ -1,7 +1,8 @@
 'use strict';
+import * as BP from 'bluebird'; 
 import { SubscriberFactory } from './subscriptions/SubscriberFactory';
 
-class CloudwatchLogsSubscribe {
+class CloudWatchLogSubscriberPlugin {
   constructor(serverless, options) {
     this.serverless = serverless;
     this.options = options;
@@ -21,9 +22,16 @@ class CloudwatchLogsSubscribe {
             required: true,
             shortcut: 'r',
           },
-          stream: {
+          type: {
             usage:
-            'Specify a kinesis stream name to deploy '
+            'Specify the supported type of the subscriber resource ( eg: kinesis | firehose | lambda )'
+            + '--type',
+            required: true,
+            shortcut: 't',
+          },
+          name: {
+            usage:
+            'Specify a name of the subscriber resource of the given type ( Kinesis name | Kinesis Firehorse name | Lambda function name)'
             + '--stream',
             required: true,
             shortcut: 's',
@@ -42,30 +50,33 @@ class CloudwatchLogsSubscribe {
     this.hooks = {
       'before:subscribe:init': this.beforePlugginInit.bind(this),
       'subscribe:init': this.displaySubscriptionVariables.bind(this),
-      'subscribe:deploy': this.addSubscriptions.bind(this),
+      'subscribe:deploy': BP.promisifyAll(this.addSubscriptions).bind(this),
       'after:subscribe:deploy': this.afterSubscribe.bind(this),
     };
   }
 
   beforePlugginInit() {
-    this.serverless.cli.log('initialising the subscription process!');
+    this.serverless.cli.log('Initialising the Subscription process...');
   }
   displaySubscriptionVariables() {
-      this.serverless.cli.log(`Region set to ${this.options.region}`);
-      this.serverless.cli.log(`Kinesis Stream Name set to ${this.options.stream}`);
-      this.serverless.cli.log(`Log Group Name Prefix set to ${this.options.logGroup}`);
+      this.serverless.cli.log(`Serverless Region: ${this.options.region}`);
+      this.serverless.cli.log(`Subscriber Resource type: ${this.options.type}`);
+      this.serverless.cli.log(`Subscriber Resource Name: ${this.options.name}`);
+      this.serverless.cli.log(`Log Group Name Prefix: ${this.options.logGroup}`);
   }
-  addSubscriptions() {
-      const subscriber = new SubscriberFactory({
-          region: this.options.region,
-          streamName: this.options.stream,
-          logGroupNamePrefix: this.options.logGroup,
-      });
-      this.serverless.cli.log(subscriber.subscribe());
+  async addSubscriptions() {
+    const subscriber = new SubscriberFactory({
+        region: this.options.region,
+        streamName: this.options.name,
+        subscriberType: this.options.type,
+        logGroupNamePrefix: this.options.logGroup,
+    });
+    this.serverless.cli.log(await subscriber.subscribe());
   }
   afterSubscribe() {
-      this.serverless.cli.log('Cloudwatch Log Group Subscriptions setup Successful.');
+    this.serverless.cli.log('Cloudwatch Log Group Subscriptions setup Successful.');
   }
 }
 
-module.exports = CloudwatchLogsSubscribe;
+module.exports = CloudWatchLogSubscriberPlugin;
+ 

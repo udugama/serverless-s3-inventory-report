@@ -12,30 +12,36 @@ import { KinesisStream } from './subscribers/KinesisStream';
  * the log streams.
  */
 export class SubscriberFactory {
-  public region: string;
-  public streamName: string;
-  public roleName;
-  public policyName;
-  public logGroupNamePrefix = '/aws/lambda/';
+  private region: string;
+  private streamName: string;
+  private subscriberType: string;
+  private roleName;
+  private policyName;
+  private logGroupNamePrefix = '/aws/lambda/';
   private iAm: any;
   private kinesis: any;
   private cloudWatchLogs: any;
+  // accepted subscriber types
+  private allovedSubscriberTypes = ['kinesis', 'firehose', 'lambda'];
 
   constructor({
     region,
     streamName,
+    subscriberType,
     logGroupNamePrefix,
     roleName = 'CWLtoKinesisRole',
     policyName = 'Permissions-Policy-For-CWL',
   }: {
     region: SubscriberFactory['region'],
     streamName: SubscriberFactory['streamName'],
+    subscriberType: SubscriberFactory['subscriberType'],
     roleName?: string,
     policyName?: string;
     logGroupNamePrefix?: string;
   }) {
     this.region = region;
     this.streamName = streamName;
+    this.subscriberType = subscriberType;
     this.roleName = roleName;
     this.policyName = policyName;
     this.logGroupNamePrefix += logGroupNamePrefix;
@@ -48,8 +54,21 @@ export class SubscriberFactory {
     }
     if (!streamName) {
       throw new NotFoundError({
-        title: 'kinesis stream name not set',
-        detail: 'kinesis stream name not set',
+        title: 'subscriber name not set',
+        detail: 'subscriber name not set',
+      });
+    }
+    if (!subscriberType) {
+      throw new NotFoundError({
+        title: 'subscriber type not set',
+        detail: 'subscriber type not set',
+      });
+    }
+    // check the type supported
+    if (0 === (this.allovedSubscriberTypes.filter((type) => subscriberType === type)).length) {
+      throw new NotFoundError({
+        title: 'subscriber type not supported',
+        detail: 'subscriber type not supported ',
       });
     }
 
@@ -60,10 +79,7 @@ export class SubscriberFactory {
       apiVersion: '2010-05-08',
       region,
     });
-    this.kinesis = new Kinesis({
-      apiVersion: '2013-12-02',
-      region,
-    });
+
     this.cloudWatchLogs = new CloudWatchLogs({
       apiVersion: '2014-03-28',
       region,
@@ -77,10 +93,11 @@ export class SubscriberFactory {
    */
   /*eslint no-console: "error"*/
   public async subscribe() {
-    console.log('Initialising Cloud Watch Subscription ...');
-    console.log(`Checking kinesis stream ${this.streamName}`);
 
-    const SubscriberResource = await this.getSubscriber('kinesis');
+    console.log('Initialising Cloud Watch Subscription ...');
+    console.log(`Checking subscriber resource name: ${this.streamName}`);
+
+    const SubscriberResource = await this.getSubscriber(this.subscriberType);
 
     await SubscriberResource.initialise();
 
@@ -210,7 +227,7 @@ export class SubscriberFactory {
     };
 
     /**
-     * Check Log subscriptions for Kinesis stream and delete if exists.
+     * Check Log group subscriptions for subscribers and remove if exists.
      */
     await map(cloudWatchLogGroups, async (group: any) => {
       try {
