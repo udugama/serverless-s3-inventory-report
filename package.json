@@ -1,5 +1,5 @@
 {
-  "name": "serverless-cloudwatch-logs-subscriber",
+  "name": "serverless-cloudwatch-log-subscriber",
   "description": "A serverless plugin to deploy applications to AWS ElasticBeanstalk.",
   "version": "1.3.0",
   "main": "dist/index.js",

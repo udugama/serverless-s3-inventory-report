@@ -22,7 +22,7 @@ export class SubscriberFactory {
   private kinesis: any;
   private cloudWatchLogs: any;
   // accepted subscriber types
-  private allovedSubscriberTypes = ['kinesis', 'firehose', 'lambda'];
+  private allovedSubscriberTypes = ['kinesis', 'firehose', 'lambda']; // firehose and lambda not yet supported 
 
   constructor({
     region,
@@ -308,10 +308,10 @@ export class SubscriberFactory {
         break;
 
       /**
-       * @todo Add implimentation of the subscriber services to support to the pluggin
+       * @todo Add implimentation of the other subscriber services support. ie: lamda, firehose
        */
 
-      // case 'kinesis-firehose'
+      // case 'firehose'
         // subscriberResource = new KinesisStream({
         //   region: this.region,
         //   streamName: this.streamName,

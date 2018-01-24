@@ -40,7 +40,7 @@ class CloudWatchLogSubscriberPlugin {
             usage:
             'Specify a log group prefix to add the subscription '
             + '--logGroup',
-            required: false,
+            required: true,
             shortcut: 'l',
           },
         },
