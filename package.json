@@ -1,7 +1,7 @@
 {
   "name": "serverless-s3-inventory-report",
   "description": "A serverless plugin to deploy s3 inventory report.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
@@ -37,29 +37,20 @@
     "aws-sdk": "^2.133.0",
     "aws-sdk-mock": "^1.7.0",
     "bluebird": "3.x.x",
-    "bundle-bundler": "0.x.x",
-    "fs-promise": "2.x.x",
     "serverless-types": "^0.0.1"
   },
   "devDependencies": {
     "@types/bluebird": "3.x.x",
-    "@types/chai": "4.x.x",
-    "@types/fs-promise": "1.x.x",
     "@types/jest": "^20.0.8",
     "@types/node": "7.x.x",
-    "awesome-typescript-loader": "3.x.x",
-    "chai": "3.x.x",
     "esdoc": "0.x.x",
     "esdoc-es7-plugin": "0.x.x",
     "jest": "^20.0.4",
-    "serverless": "1.13.0",
     "sinon": "1.x.x",
     "ts-jest": "^21.0.0",
     "ts-node": "3.x.x",
     "tslint": "5.x.x",
     "typescript": "2.x.x",
-    "webpack": "2.x.x",
-    "yamljs": "0.x.x",
-    "zip-unzip-promise": "1.0.0"
+    "webpack": "2.x.x"
   }
 }
