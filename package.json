@@ -1,7 +1,7 @@
 {
-  "name": "serverless-cloudwatch-log-subscriber",
-  "description": "A serverless plugin to deploy applications to AWS ElasticBeanstalk.",
-  "version": "1.3.0",
+  "name": "serverless-s3-inventory-report",
+  "description": "A serverless plugin to deploy s3 inventory report.",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
@@ -9,6 +9,7 @@
     "build": "tsc",
     "prerelease": "yarn build && yarn version",
     "clear": "rm -rf dist",
+    "build:link": "yarn unlink && yarn build && yarn link",
     "watch": "npm-watch",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "tests": "env TZ='UTC' NODE_ENV=test mocha --require ts-node/register test/src/*.test.ts test/src/**/*.test.ts",
@@ -20,8 +21,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:rawphp/serverless-plugin-elastic-beanstalk.git"
+    "url": "https://github.com/udugama/serverless-s3-inventory-report.git"
   },
+  "author": "Prasad Udugama <udugama@gmail.com>",
   "keywords": [
     "serverless",
     "plugin",
@@ -32,7 +34,6 @@
     "CLI"
   ],
   "dependencies": {
-    "@temando/errors": "^0.4.0",
     "aws-sdk": "^2.133.0",
     "aws-sdk-mock": "^1.7.0",
     "bluebird": "3.x.x",
