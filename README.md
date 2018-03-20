@@ -1,6 +1,6 @@
-Example serverless.yml configeration for the s3 inventory report
+## Example serverless.yml configeration for the s3 inventory report
 
-custom:
+```custom:
   S3InventoryReportConfiguration:
     Id: claptrap-${self:provider.stage}-creeper-${self:provider.region}
     Bucket: storage-v2-${self:provider.stage}-backup-${self:provider.region}
@@ -26,10 +26,10 @@ custom:
       # Encryption: {
       #   SSEKMS:
       #     KeyId: 'string' |
-      #   SSES3  # [optional] 
+      #   SSES3  # [optional]```
       
 
-      Deploy Commands:
+  ## Deploy Commands:
 
       please execute following command during deployment `serverless s3inventoryReport --region <AWS Region>` 
 
