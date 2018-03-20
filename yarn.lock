@@ -6,10 +6,6 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@octetstream/promisify/-/promisify-1.1.0.tgz#9ac9ddb19d02486bf282234a3caac1a6c071b69b"
 
-"@temando/errors@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@temando/errors/-/errors-0.4.0.tgz#b3979274ef9a39dc339b04b112f243741ac96164"
-
 "@types/bluebird@3.x.x":
   version "3.5.16"
   resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.16.tgz#d65dbbf3bc62a0b3dd145f48dc6511b1ed8cc6bb"

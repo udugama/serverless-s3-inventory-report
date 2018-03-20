@@ -2,8 +2,8 @@
 
 ```custom:
   S3InventoryReportConfiguration:
-    Id: claptrap-${self:provider.stage}-creeper-${self:provider.region}
-    Bucket: storage-v2-${self:provider.stage}-backup-${self:provider.region}
+    Id: myreport-${self:provider.stage}-${self:provider.region}
+    Bucket: bucket-${self:provider.stage}-${self:provider.region}
     Schedule:
       Frequency: Daily # Daily | Weekly [required] freequency of the inventory report
     IncludedObjectVersions: All  # All | Current [required] object versions 
@@ -19,7 +19,7 @@
       - ReplicationStatus
       - EncryptionStatus
     Destination:
-      Bucket: arn:aws:s3:::storage-v2-pu-backup-eu-west-1-inventory # destination bucket arn
+      Bucket: arn:aws:s3:::mybucket-mystage-eu-west-1-inventory # destination bucket arn
       Format: CSV
       Prefix: inventory
       # AccountId: '2342343242423' # [optional] provide if destination bucket belongs to external account
