@@ -1,7 +1,7 @@
 {
   "name": "serverless-s3-inventory-report",
   "description": "A serverless plugin to deploy s3 inventory report.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
