@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "yarn run clear",
-    "build": "tsc",
+    "build": "bash -e -v scripts/build",
     "prerelease": "yarn build && yarn version",
     "clear": "rm -rf dist",
     "build:link": "yarn unlink && yarn build && yarn link",
@@ -16,7 +16,7 @@
     "test:unit": "jest --testPathPattern='\\/[^/.]+\\.test\\.tsx?$' src"
   },
   "engines": {
-    "node": ">=6.10"
+    "node": ">=4.30"
   },
   "repository": {
     "type": "git",
@@ -35,7 +35,6 @@
   ],
   "dependencies": {
     "aws-sdk": "^2.133.0",
-    "aws-sdk-mock": "^1.7.0",
     "bluebird": "3.x.x",
     "serverless-types": "^0.0.1"
   },
